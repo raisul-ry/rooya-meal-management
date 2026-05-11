@@ -5,7 +5,7 @@
 *Internal lunch sign-up tool for the Rooya team*
 
 [![Live](https://img.shields.io/badge/Live-rooya--meal--management.onrender.com-059669?style=flat-square&logo=render&logoColor=white)](https://rooya-meal-management.onrender.com)
-[![Go](https://img.shields.io/badge/Go-1.21-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev)
+[![Go](https://img.shields.io/badge/Go-1.26-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev)
 [![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
 [![Render](https://img.shields.io/badge/Hosted%20on-Render-46E3B7?style=flat-square&logo=render&logoColor=white)](https://render.com)
 
@@ -31,7 +31,7 @@
 
 | Layer | Technology |
 |---|---|
-| Language | Go 1.21 |
+| Language | Go 1.26 |
 | Web framework | Go standard library (`net/http`) |
 | Templating | Go `html/template` |
 | Database | Supabase (PostgreSQL) via `lib/pq` |
@@ -90,7 +90,7 @@ Schema lives in [`db/schema.sql`](db/schema.sql). Run it once in the Supabase SQ
 
 ## 🚀 Local Development
 
-**Prerequisites:** Go 1.21+
+**Prerequisites:** Go 1.26+
 
 ```bash
 # Run with local JSON storage (no database needed)
