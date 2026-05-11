@@ -1,26 +1,33 @@
-# Rooya Meal Manager
+<div align="center">
 
-Internal lunch sign-up tool for Rooya. Members register for daily lunches before a configurable daily deadline. Built with Go and backed by Supabase PostgreSQL.
+# 🍽️ Rooya Meal Manager
 
-**Live:** [rooya-meal-management.onrender.com](https://rooya-meal-management.onrender.com)
+*Internal lunch sign-up tool for the Rooya team*
 
----
+[![Live](https://img.shields.io/badge/Live-rooya--meal--management.onrender.com-059669?style=flat-square&logo=render&logoColor=white)](https://rooya-meal-management.onrender.com)
+[![Go](https://img.shields.io/badge/Go-1.21-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev)
+[![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
+[![Render](https://img.shields.io/badge/Hosted%20on-Render-46E3B7?style=flat-square&logo=render&logoColor=white)](https://render.com)
 
-## Features
-
-- **Rolling 7-day dashboard** — shows yesterday, today, and the next 5 days
-- **Deadline enforcement** — checkboxes lock automatically after the configured cut-off time
-- **Bulk member management** — add multiple members at once; password-protected
-- **Meal history** — full log of past lunch days with per-day attendance
-- **Weekly menu** — upload and display a PDF menu
-- **Admin password** — settings and member management require a password
-- **Mobile-friendly** — card layout on small screens with a slide-in side nav
-- **Auto midnight refresh** — page reloads at midnight to shift the rolling window
-- **Timezone-aware** — configurable via `TZ` environment variable
+</div>
 
 ---
 
-## Tech Stack
+## ✨ Features
+
+- 📅 **Rolling 7-day dashboard** — shows yesterday, today, and the next 5 days
+- 🔒 **Deadline enforcement** — checkboxes lock automatically after the configured cut-off time
+- 👥 **Bulk member management** — add multiple members at once; password-protected
+- 📋 **Meal history** — full log of past lunch days with per-day attendance
+- 🍜 **Weekly menu** — upload and display a PDF menu
+- 🛡️ **Admin password** — settings and member management require a password
+- 📱 **Mobile-friendly** — card layout on small screens with a slide-in side nav
+- 🌙 **Auto midnight refresh** — page reloads at midnight to shift the rolling window
+- 🌏 **Timezone-aware** — configurable via `TZ` environment variable
+
+---
+
+## 🛠️ Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -33,19 +40,19 @@ Internal lunch sign-up tool for Rooya. Members register for daily lunches before
 
 ---
 
-## Environment Variables
+## ⚙️ Environment Variables
 
 | Variable | Required | Description |
 |---|---|---|
-| `DATABASE_URL` | Yes (production) | Supabase PostgreSQL connection URI |
-| `SETTINGS_PASSWORD` | Yes (production) | Password to protect settings and member management |
+| `DATABASE_URL` | Yes | Supabase PostgreSQL connection URI |
+| `SETTINGS_PASSWORD` | Yes | Password to protect settings and member management |
 | `TZ` | Recommended | Timezone for deadline calculation (e.g. `Asia/Dhaka`) |
 
 ---
 
-## Database Schema
+## 🗄️ Database Schema
 
-Schema lives in [`db/schema.sql`](db/schema.sql). Run it once in the Supabase SQL Editor to create the required tables:
+Schema lives in [`db/schema.sql`](db/schema.sql). Run it once in the Supabase SQL Editor:
 
 - `members` — registered members
 - `meal_signups` — per-member per-day sign-ups
@@ -53,7 +60,7 @@ Schema lives in [`db/schema.sql`](db/schema.sql). Run it once in the Supabase SQ
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 ├── main.go          — HTTP server, route handlers, view models
@@ -70,7 +77,7 @@ Schema lives in [`db/schema.sql`](db/schema.sql). Run it once in the Supabase SQ
 
 ---
 
-## Local Development
+## 🚀 Local Development
 
 **Prerequisites:** Go 1.21+
 
@@ -86,12 +93,14 @@ App runs at `http://localhost:5050`.
 
 ---
 
-## Deployment
+## ☁️ Deployment
 
 Hosted on [Render](https://render.com) via `render.yaml`. Deploys automatically on every push to `main`. Set `DATABASE_URL`, `SETTINGS_PASSWORD`, and `TZ` in the Render dashboard under **Environment**.
 
 ---
 
-## License
+<div align="center">
 
-Private — internal use only.
+*Private — internal use at [Rooya](https://www.rooya.ai)*
+
+</div>
