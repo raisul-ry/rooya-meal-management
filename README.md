@@ -63,10 +63,21 @@ Schema lives in [`db/schema.sql`](db/schema.sql). Run it once in the Supabase SQ
 ## 📁 Project Structure
 
 ```
-├── main.go          — HTTP server, route handlers, view models
-├── store.go         — Store interface and shared types
-├── store_json.go    — Local JSON fallback implementation
-├── store_pg.go      — PostgreSQL (Supabase) implementation
+├── cmd/server/
+│   └── main.go      — Entry point: server startup, store wiring
+├── internal/
+│   ├── store/
+│   │   ├── store.go — Store interface, Member and Settings types
+│   │   ├── json.go  — Local JSON fallback implementation
+│   │   └── pg.go    — PostgreSQL (Supabase) implementation
+│   └── web/
+│       ├── server.go   — Server struct, router, shared helpers
+│       ├── index.go    — Dashboard handler and view models
+│       ├── history.go  — History handler and view models
+│       ├── menu.go     — Menu handler and PDF upload
+│       ├── settings.go — Settings handler and view models
+│       ├── members.go  — Member add/delete API handlers
+│       └── meals.go    — Meal toggle API handler
 ├── db/
 │   └── schema.sql   — Database schema
 ├── templates/       — Server-rendered HTML templates
@@ -83,10 +94,10 @@ Schema lives in [`db/schema.sql`](db/schema.sql). Run it once in the Supabase SQ
 
 ```bash
 # Run with local JSON storage (no database needed)
-go run .
+go run ./cmd/server/
 
 # Run with Supabase
-DATABASE_URL="postgresql://..." SETTINGS_PASSWORD="..." TZ="Asia/Dhaka" go run .
+DATABASE_URL="postgresql://..." SETTINGS_PASSWORD="..." TZ="Asia/Dhaka" go run ./cmd/server/
 ```
 
 App runs at `http://localhost:5050`.

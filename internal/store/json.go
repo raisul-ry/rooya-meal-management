@@ -1,8 +1,9 @@
-package main
+package store
 
 import (
 	"encoding/json"
 	"os"
+	"slices"
 	"strings"
 	"sync"
 )
@@ -52,8 +53,7 @@ func (s *JSONStore) write(d jsonData) error {
 func (s *JSONStore) GetMembers() ([]Member, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	d := s.read()
-	return d.Members, nil
+	return s.read().Members, nil
 }
 
 func (s *JSONStore) AddMember(m Member) error {
@@ -67,8 +67,7 @@ func (s *JSONStore) AddMember(m Member) error {
 func (s *JSONStore) MemberNameExists(name string) (bool, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	d := s.read()
-	for _, m := range d.Members {
+	for _, m := range s.read().Members {
 		if strings.EqualFold(m.Name, name) {
 			return true, nil
 		}
@@ -80,15 +79,9 @@ func (s *JSONStore) DeleteMember(id string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	d := s.read()
-	keep := d.Members[:0]
-	for _, m := range d.Members {
-		if m.ID != id {
-			keep = append(keep, m)
-		}
-	}
-	d.Members = keep
+	d.Members = slices.DeleteFunc(d.Members, func(m Member) bool { return m.ID == id })
 	for date := range d.Meals {
-		d.Meals[date] = removeStr(d.Meals[date], id)
+		d.Meals[date] = slices.DeleteFunc(d.Meals[date], func(mid string) bool { return mid == id })
 	}
 	return s.write(d)
 }
@@ -107,9 +100,8 @@ func (s *JSONStore) GetMeals(dates []string) (map[string][]string, error) {
 func (s *JSONStore) GetPastMeals(before string) (map[string][]string, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	d := s.read()
 	result := map[string][]string{}
-	for date, mids := range d.Meals {
+	for date, mids := range s.read().Meals {
 		if date < before && len(mids) > 0 {
 			result[date] = mids
 		}
@@ -123,8 +115,8 @@ func (s *JSONStore) ToggleMeal(date, memberID string) (bool, int, error) {
 	d := s.read()
 	list := d.Meals[date]
 	checked := false
-	if contains(list, memberID) {
-		d.Meals[date] = removeStr(list, memberID)
+	if slices.Contains(list, memberID) {
+		d.Meals[date] = slices.DeleteFunc(list, func(mid string) bool { return mid == memberID })
 	} else {
 		d.Meals[date] = append(list, memberID)
 		checked = true

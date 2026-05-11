@@ -2,7 +2,7 @@ services:
   - type: web
     name: rooya-meal-management
     runtime: go
-    buildCommand: go build -o app .
+    buildCommand: go build -o app ./cmd/server/
     startCommand: ./app
     envVars:
       - key: DATABASE_URL

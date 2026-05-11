@@ -1,7 +1,8 @@
-package main
+package store
 
 import (
 	"database/sql"
+	"strconv"
 	"strings"
 
 	_ "github.com/lib/pq"
@@ -75,11 +76,10 @@ func (s *PGStore) GetMeals(dates []string) (map[string][]string, error) {
 		return result, nil
 	}
 
-	// Build $1,$2,... placeholders
 	placeholders := make([]string, len(dates))
 	args := make([]any, len(dates))
 	for i, d := range dates {
-		placeholders[i] = "$" + itoa(i+1) + "::date"
+		placeholders[i] = "$" + strconv.Itoa(i+1) + "::date"
 		args[i] = d
 	}
 	query := `SELECT meal_date::text, member_id::text FROM meal_signups WHERE meal_date IN (` +
@@ -174,17 +174,4 @@ func (s *PGStore) SaveSettings(set Settings) error {
 		ON CONFLICT (id) DO UPDATE SET deadline_hour = $1, deadline_minute = $2
 	`, set.DeadlineHour, set.DeadlineMinute)
 	return err
-}
-
-// itoa is a minimal int-to-string for building SQL placeholders.
-func itoa(n int) string {
-	if n == 0 {
-		return "0"
-	}
-	digits := []byte{}
-	for n > 0 {
-		digits = append([]byte{byte('0' + n%10)}, digits...)
-		n /= 10
-	}
-	return string(digits)
 }

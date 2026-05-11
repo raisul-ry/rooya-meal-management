@@ -1,4 +1,4 @@
-package main
+package store
 
 // Member is a registered lunch participant.
 type Member struct {
@@ -14,7 +14,6 @@ type Settings struct {
 
 // Store abstracts all persistence. Swap JSON ↔ Postgres without touching handlers.
 type Store interface {
-	// Members
 	GetMembers() ([]Member, error)
 	AddMember(m Member) error
 	MemberNameExists(name string) (bool, error)
@@ -25,7 +24,6 @@ type Store interface {
 	GetPastMeals(before string) (map[string][]string, error)
 	ToggleMeal(date, memberID string) (checked bool, dayTotal int, err error)
 
-	// Settings
 	GetSettings() (Settings, error)
 	SaveSettings(s Settings) error
 }
