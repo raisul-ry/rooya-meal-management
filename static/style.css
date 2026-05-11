@@ -178,7 +178,7 @@ body {
 .sidenav-links a.active { color: var(--emerald); background: rgba(16,185,129,.15); }
 
 /* ── Layout ──────────────────────────────────── */
-.container { max-width: 1440px; margin: 0 auto; padding: 2rem 2.5rem; }
+.container { max-width: 1440px; margin: 0 auto; padding: 2rem 2.5rem; position: relative; z-index: 1; }
 
 .page-header {
     display: flex;
@@ -488,6 +488,7 @@ tr:hover .btn-delete { opacity: 1; }
     border: 1px solid var(--border);
     max-width: 560px;
     overflow: hidden;
+    margin: 0 auto;
 }
 
 .settings-section { padding: 1.5rem 1.75rem; }
@@ -627,6 +628,21 @@ tr:hover .btn-delete { opacity: 1; }
 
     .container { padding: 1rem; }
     h1 { font-size: 1.35rem; }
+}
+
+/* ── Food background ─────────────────────────── */
+.food-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.food-bg svg {
+    position: absolute;
+    color: var(--text);
+    opacity: .05;
 }
 
 /* ── Toast ───────────────────────────────────── */
