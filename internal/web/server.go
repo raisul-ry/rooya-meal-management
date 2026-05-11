@@ -32,6 +32,7 @@ func NewServer(s store.Store, password, baseDir string) *Server {
 func (srv *Server) Routes() *http.ServeMux {
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("GET /health", srv.handleHealth)
 	mux.HandleFunc("GET /{$}", srv.handleIndex)
 	mux.HandleFunc("GET /history", srv.handleHistory)
 	mux.HandleFunc("GET /menu", srv.handleMenu)
