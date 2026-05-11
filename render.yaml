@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: rooya-meal-management
+    runtime: go
+    buildCommand: go build -o app .
+    startCommand: ./app
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SETTINGS_PASSWORD
+        sync: false

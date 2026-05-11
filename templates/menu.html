@@ -1,0 +1,30 @@
+{{define "title"}}Menu — Meal Manager{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <div>
+        <h1>Weekly Menu</h1>
+        <p class="page-subtitle">Current meal menu</p>
+    </div>
+    <label class="btn btn-ghost" style="cursor:pointer">
+        📎 Upload PDF
+        <input type="file" accept=".pdf" style="display:none" onchange="uploadMenu(this)">
+    </label>
+</div>
+
+<div class="menu-container">
+    {{if .HasPDF}}
+    <iframe src="/static/menu.pdf" class="pdf-frame" title="Weekly Menu"></iframe>
+    {{else}}
+    <div class="menu-placeholder">
+        <span class="empty-icon">📄</span>
+        <h3>No menu uploaded yet</h3>
+        <p>Upload a PDF to display the weekly menu here.</p>
+        <label class="btn btn-primary" style="cursor:pointer; margin-top:1rem; display:inline-flex">
+            Upload Menu PDF
+            <input type="file" accept=".pdf" style="display:none" onchange="uploadMenu(this)">
+        </label>
+    </div>
+    {{end}}
+</div>
+{{end}}

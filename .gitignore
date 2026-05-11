@@ -1,0 +1,22 @@
+# Compiled binary
+Rooya_Meal_Management
+
+# Local data — machine-specific, excluded from repo
+data/*.json
+
+# Uploaded menu PDF — local content
+static/menu.pdf
+
+# macOS
+.DS_Store
+
+# JetBrains IDE
+.idea/
+*.iml
+
+# Environment — contains DB credentials
+.env
+
+# Claude Code project settings
+.claude/
+.tokensave

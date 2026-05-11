@@ -1,0 +1,151 @@
+{{define "title"}}Dashboard — Meal Manager{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <div>
+        <h1>Lunch Schedule</h1>
+        <p class="page-subtitle">Next 7 days — check a box to sign up for lunch</p>
+    </div>
+    <button class="btn btn-primary" onclick="showAddMemberModal()">+ Add Member</button>
+</div>
+
+{{if .HasMembers}}
+<div class="table-wrapper">
+    <table class="meal-table">
+        <thead>
+            <tr>
+                <th class="col-num">#</th>
+                <th class="col-name">Member</th>
+                {{range .Dates}}
+                <th class="col-day {{if .Modifiable}}col-open{{else}}col-locked{{end}}">
+                    <div class="day-label">{{fmtDay .Date}}</div>
+                    <div class="day-date">{{fmtDate .Date}}</div>
+                    {{if .Modifiable}}
+                    <span class="open-badge" title="Sign-up open">✓</span>
+                    {{else}}
+                    <span class="lock-badge" title="Sign-up closed">🔒</span>
+                    {{end}}
+                </th>
+                {{end}}
+                <th class="col-total">Week</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range $i, $m := .Members}}
+            <tr>
+                <td class="td-num">{{add1 $i}}</td>
+                <td class="td-name">
+                    <div class="name-cell">
+                        <span class="member-name">{{$m.Name}}</span>
+                        <button class="btn-delete" onclick="deleteMember('{{$m.ID}}', '{{$m.Name}}')" title="Remove">×</button>
+                    </div>
+                </td>
+                {{range $m.Cells}}
+                <td class="td-check {{if not .Modifiable}}td-locked{{end}}">
+                    <input type="checkbox"
+                           class="meal-cb"
+                           data-member="{{.MemberID}}"
+                           data-date="{{.Date}}"
+                           {{if .Checked}}checked{{end}}
+                           {{if not .Modifiable}}disabled{{end}}>
+                </td>
+                {{end}}
+                <td class="td-member-total">{{$m.Total}}</td>
+            </tr>
+            {{end}}
+        </tbody>
+        <tfoot>
+            <tr class="row-totals">
+                <td class="td-num"></td>
+                <td class="td-name"><strong>Total Lunches</strong></td>
+                {{range .Dates}}
+                <td class="td-day-total" id="total-{{.Date}}">{{.Total}}</td>
+                {{end}}
+                <td class="td-grand-total" id="grand-total">{{.Total}}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<!-- Mobile card view -->
+<div class="mobile-cards">
+    {{range $i, $m := .Members}}
+    <div class="member-card">
+        <div class="member-card-header">
+            <span class="member-card-num">{{add1 $i}}</span>
+            <span class="member-name">{{$m.Name}}</span>
+            <button class="btn-delete" onclick="deleteMember('{{$m.ID}}', '{{$m.Name}}')">×</button>
+        </div>
+        <div class="member-card-days">
+            {{range $m.Cells}}
+            <label class="day-chip {{if .Checked}}day-chip-on{{end}} {{if not .Modifiable}}day-chip-locked{{end}}">
+                <input type="checkbox"
+                       class="meal-cb"
+                       data-member="{{.MemberID}}"
+                       data-date="{{.Date}}"
+                       {{if .Checked}}checked{{end}}
+                       {{if not .Modifiable}}disabled{{end}}>
+                <span class="day-chip-name">{{fmtDay .Date}}</span>
+                <span class="day-chip-date">{{fmtDate .Date}}</span>
+            </label>
+            {{end}}
+        </div>
+        <div class="member-card-total">Week: <strong>{{$m.Total}}</strong></div>
+    </div>
+    {{end}}
+
+    <div class="member-card member-card-summary">
+        <div class="member-card-header"><span class="member-name">Daily Totals</span></div>
+        <div class="member-card-days">
+            {{range .Dates}}
+            <div class="day-chip day-chip-stat">
+                <span class="day-chip-name">{{fmtDay .Date}}</span>
+                <span class="day-chip-date">{{fmtDate .Date}}</span>
+                <span class="day-chip-count" data-m-date="{{.Date}}">{{.Total}}</span>
+            </div>
+            {{end}}
+        </div>
+        <div class="member-card-total">Grand total: <strong id="m-grand-total">{{.Total}}</strong></div>
+    </div>
+</div>
+{{else}}
+<div class="empty-state">
+    <span class="empty-icon">👥</span>
+    <h3>No members yet</h3>
+    <p>Add your first member to start tracking lunches.</p>
+    <button class="btn btn-primary" style="margin-top:1rem" onclick="showAddMemberModal()">+ Add Member</button>
+</div>
+{{end}}
+
+<!-- Delete Member Modal -->
+<div class="modal" id="deleteMemberModal">
+    <div class="modal-box">
+        <h2>Remove Member</h2>
+        <p id="deleteConfirmText" style="color:var(--muted);font-size:.9rem;margin-bottom:1rem;"></p>
+        <input type="password" id="deletePassword" class="text-input"
+            placeholder="Admin password" autocomplete="current-password">
+        <p class="field-error" id="deleteError"></p>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="hideDeleteModal()">Cancel</button>
+            <button class="btn" style="background:var(--red);color:#fff;" onclick="confirmDelete()">Remove</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Member Modal -->
+<div class="modal" id="addMemberModal">
+    <div class="modal-box">
+        <h2>Add Members</h2>
+        <textarea id="memberNameInput" class="text-input" rows="5"
+            placeholder="One name per line&#10;Alice&#10;Bob&#10;Charlie"
+            autocomplete="off" style="resize:vertical;"></textarea>
+        <input type="password" id="memberPassword" class="text-input"
+            placeholder="Admin password" autocomplete="current-password" style="margin-top:.5rem;">
+        <p class="field-error" id="memberError"></p>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="hideAddMemberModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="addMember()">Add</button>
+        </div>
+    </div>
+</div>
+{{end}}

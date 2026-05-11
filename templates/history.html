@@ -1,0 +1,37 @@
+{{define "title"}}History — Meal Manager{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <div>
+        <h1>Meal History</h1>
+        <p class="page-subtitle">Past lunch records</p>
+    </div>
+</div>
+
+{{if .Entries}}
+<div class="history-list">
+    {{range .Entries}}
+    <div class="history-card">
+        <div class="history-header">
+            <div>
+                <div class="history-date">{{fmtFull .Date}}</div>
+                <div class="history-count-label">{{.Count}} {{plural .Count "lunch"}}</div>
+            </div>
+            <span class="history-badge">{{.Count}}</span>
+        </div>
+        <div class="history-names">
+            {{range .Names}}
+            <span class="name-chip">{{.}}</span>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+</div>
+{{else}}
+<div class="empty-state">
+    <span class="empty-icon">📋</span>
+    <h3>No history yet</h3>
+    <p>Past lunch records will appear here.</p>
+</div>
+{{end}}
+{{end}}

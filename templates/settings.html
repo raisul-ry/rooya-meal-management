@@ -1,0 +1,67 @@
+{{define "title"}}Settings — Meal Manager{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <div>
+        <h1>Settings</h1>
+        <p class="page-subtitle">Configure sign-up deadline and preferences</p>
+    </div>
+</div>
+
+<div class="settings-card">
+    <form onsubmit="saveSettings(event)">
+        <div class="settings-section">
+            <h2 class="section-title">Sign-up Deadline</h2>
+            <p class="section-desc">
+                Members can sign up for lunch until this time on the <strong>day before</strong>.
+                After the deadline, checkboxes are locked.
+            </p>
+
+            <div class="field-row">
+                <div class="field-group">
+                    <label for="deadline_hour">Hour</label>
+                    <select name="deadline_hour" id="deadline_hour" class="select-input">
+                        {{range .Hours}}
+                        <option value="{{.}}" {{if eq . $.Settings.DeadlineHour}}selected{{end}}>
+                            {{printf "%02d" .}}:00
+                        </option>
+                        {{end}}
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="deadline_minute">Minute</label>
+                    <select name="deadline_minute" id="deadline_minute" class="select-input">
+                        {{range .Minutes}}
+                        <option value="{{.}}" {{if eq . $.Settings.DeadlineMinute}}selected{{end}}>
+                            :{{printf "%02d" .}}
+                        </option>
+                        {{end}}
+                    </select>
+                </div>
+            </div>
+
+            <p class="field-hint">
+                Currently: sign-up closes at
+                <strong>{{printf "%02d" .Settings.DeadlineHour}}:{{printf "%02d" .Settings.DeadlineMinute}}</strong>
+                the day before. E.g., for Wednesday lunch, sign-up closes Tuesday
+                at {{printf "%02d" .Settings.DeadlineHour}}:{{printf "%02d" .Settings.DeadlineMinute}}.
+            </p>
+        </div>
+
+        <div class="settings-section">
+            <h2 class="section-title">Password</h2>
+            <div class="field-row">
+                <div class="field-group">
+                    <label for="password">Admin Password</label>
+                    <input type="password" name="password" id="password" class="select-input" placeholder="Enter password" autocomplete="current-password">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <span class="save-msg" id="saveMsg">✓ Saved</span>
+        </div>
+    </form>
+</div>
+{{end}}
