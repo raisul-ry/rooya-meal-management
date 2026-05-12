@@ -8,8 +8,9 @@ type Member struct {
 
 // Settings holds configurable behaviour.
 type Settings struct {
-	DeadlineHour   int `json:"deadline_hour"`
-	DeadlineMinute int `json:"deadline_minute"`
+	DeadlineHour    int    `json:"deadline_hour"`
+	DeadlineMinute  int    `json:"deadline_minute"`
+	TeamsWebhookURL string `json:"teams_webhook_url"`
 }
 
 // Store abstracts all persistence. Swap JSON ↔ Postgres without touching handlers.

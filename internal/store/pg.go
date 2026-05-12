@@ -159,8 +159,8 @@ func (s *PGStore) ToggleMeal(date, memberID string) (bool, int, error) {
 func (s *PGStore) GetSettings() (Settings, error) {
 	var set Settings
 	err := s.db.QueryRow(
-		`SELECT deadline_hour, deadline_minute FROM app_settings WHERE id = 1`,
-	).Scan(&set.DeadlineHour, &set.DeadlineMinute)
+		`SELECT deadline_hour, deadline_minute, COALESCE(teams_webhook_url, '') FROM app_settings WHERE id = 1`,
+	).Scan(&set.DeadlineHour, &set.DeadlineMinute, &set.TeamsWebhookURL)
 	if err == sql.ErrNoRows {
 		return Settings{DeadlineHour: 22, DeadlineMinute: 0}, nil
 	}
@@ -169,9 +169,9 @@ func (s *PGStore) GetSettings() (Settings, error) {
 
 func (s *PGStore) SaveSettings(set Settings) error {
 	_, err := s.db.Exec(`
-		INSERT INTO app_settings (id, deadline_hour, deadline_minute)
-		VALUES (1, $1, $2)
-		ON CONFLICT (id) DO UPDATE SET deadline_hour = $1, deadline_minute = $2
-	`, set.DeadlineHour, set.DeadlineMinute)
+		INSERT INTO app_settings (id, deadline_hour, deadline_minute, teams_webhook_url)
+		VALUES (1, $1, $2, $3)
+		ON CONFLICT (id) DO UPDATE SET deadline_hour = $1, deadline_minute = $2, teams_webhook_url = $3
+	`, set.DeadlineHour, set.DeadlineMinute, set.TeamsWebhookURL)
 	return err
 }

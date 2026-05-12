@@ -22,7 +22,11 @@ func (srv *Server) handleSettings(w http.ResponseWriter, r *http.Request) {
 		}
 		hour, _ := strconv.Atoi(r.FormValue("deadline_hour"))
 		minute, _ := strconv.Atoi(r.FormValue("deadline_minute"))
-		srv.store.SaveSettings(store.Settings{DeadlineHour: hour, DeadlineMinute: minute})
+		srv.store.SaveSettings(store.Settings{
+			DeadlineHour:    hour,
+			DeadlineMinute:  minute,
+			TeamsWebhookURL: r.FormValue("teams_webhook_url"),
+		})
 		jsonOK(w, map[string]bool{"success": true})
 		return
 	}
